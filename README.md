@@ -4,100 +4,101 @@
 
 # Media Suite
 
-**Descarga y convierte vídeo y audio — app de escritorio para Windows.**
+**Download and convert video & audio — a desktop app for Windows.**
 
-[![Descargar](https://img.shields.io/badge/⬇_Descargar-Releases-10b981?style=for-the-badge)](../../releases/latest)
+[![Download](https://img.shields.io/badge/⬇_Download-Releases-10b981?style=for-the-badge)](../../releases/latest)
 
 [![Electron](https://img.shields.io/badge/Electron-42-47848F?logo=electron&logoColor=white)](https://www.electronjs.org/)
 [![React](https://img.shields.io/badge/React-19-149ECA?logo=react&logoColor=white)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-6-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind-4-38BDF8?logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
 
+**English** · [Español](README.es.md)
+
 </div>
 
-Aplicación de escritorio que reúne dos herramientas en una interfaz limpia y rápida:
+A desktop application that bundles two tools in one clean, bilingual interface:
 
-- 🎬 **Captura** — descarga vídeo o audio de YouTube y [cientos de webs más](https://github.com/yt-dlp/yt-dlp/blob/master/supportedsites.md).
-- 🔄 **Conversor** — convierte entre formatos de vídeo y audio con **FFmpeg nativo**.
+- 🎬 **Capture** — download video or audio from YouTube and [hundreds of other sites](https://github.com/yt-dlp/yt-dlp/blob/master/supportedsites.md).
+- 🔄 **Converter** — convert between video and audio formats with **native FFmpeg**.
 
 ---
 
-## 🖼️ Vistazo
+## 🖼️ A look
 
-| Captura (descargas) | Conversor |
+| Capture (downloads) | Converter |
 |:--:|:--:|
-| ![Pestaña Captura](docs/screenshot-captura.png) | ![Pestaña Conversor](docs/screenshot-conversor.png) |
+| ![Capture tab](docs/screenshot-captura.png) | ![Converter tab](docs/screenshot-conversor.png) |
 
 ---
 
-## ⬇️ Descargar e instalar
+## ⬇️ Download & install
 
-Entra en **[Releases](../../releases/latest)** y elige:
+Open **[Releases](../../releases/latest)** and choose:
 
-| Archivo | Qué es |
+| File | What it is |
 |---|---|
-| **`Media Suite Setup x.y.z.exe`** | Instalador para Windows (crea accesos directos). |
-| **`Media Suite-x.y.z-win.zip`** | Versión **portable**: descomprime y ejecuta `Media Suite.exe`, sin instalar. |
+| **`Media Suite Setup x.y.z.exe`** | Windows installer (creates shortcuts). |
+| **`Media Suite-x.y.z-win.zip`** | **Portable** build: unzip and run `Media Suite.exe`, no install. |
 
-> 💡 La primera vez que uses **Captura**, la app descarga `yt-dlp` automáticamente (una sola vez). **FFmpeg ya va incluido.**
+> 💡 The first time you use **Capture**, the app downloads `yt-dlp` automatically (once). **FFmpeg is already bundled.**
 >
-> ⚠️ Al no estar firmada digitalmente, Windows SmartScreen puede avisar la primera vez → *Más información → Ejecutar de todas formas*.
+> ⚠️ The app is unsigned, so Windows SmartScreen may warn on first launch → *More info → Run anyway*.
 
 ---
 
-## ✨ Características
+## ✨ Features
 
-**Captura**
-- Descarga en **vídeo (MP4)** con resolución a elegir, o **audio (MP3)**.
-- Vista previa de título, autor y duración antes de descargar.
-- Progreso en tiempo real y acceso directo al archivo o su carpeta.
+**Capture**
+- Download as **video (MP4)** with selectable resolution, or **audio (MP3)**.
+- Preview title, author and duration before downloading.
+- Real-time progress and one-click access to the file or its folder.
 
-**Conversor**
-- Arrastra y suelta archivos (o selección por diálogo nativo).
-- **Vídeo↔vídeo**, **vídeo→audio** y **audio↔audio**.
-- Selector de calidad y conversión por lotes.
+**Converter**
+- Drag & drop files (or pick them via a native dialog).
+- **Video↔video**, **video→audio** and **audio↔audio**.
+- Quality selector and batch processing.
 
-| Vídeo | Audio |
+| Video | Audio |
 |---|---|
 | MP4 · MKV · MOV · WebM · AVI | MP3 · AAC · M4A · Opus · OGG · WAV · FLAC |
 
+🌐 **Bilingual UI** — English / Spanish, auto-detected and switchable in-app.
+
 ---
 
-## 🧱 Cómo está hecho
+## 🧱 How it's built
 
-| Capa | Tecnología |
+| Layer | Technology |
 |---|---|
-| Escritorio | **Electron** + electron-vite |
-| Interfaz | **React 19** · TypeScript · Tailwind CSS v4 |
-| Descargas | **yt-dlp** (binario gestionado en runtime) |
-| Multimedia | **FFmpeg** (binario embebido) |
-| Empaquetado | electron-builder → instalador NSIS + ZIP |
+| Desktop | **Electron** + electron-vite |
+| UI | **React 19** · TypeScript · Tailwind CSS v4 |
+| Downloads | **yt-dlp** (binary managed at runtime) |
+| Media | **FFmpeg** (bundled binary) |
+| Packaging | electron-builder → NSIS installer + ZIP |
 
-**Arquitectura.** Separación estricta en tres procesos comunicados por un puente
-IPC mínimo y tipado:
+**Architecture.** Strict separation into three processes communicating through a
+minimal, typed IPC bridge:
 
-- **Main (Node).** Ciclo de vida de la app y operaciones con el sistema: lanza
-  FFmpeg para convertir (con progreso parseado de su salida) y yt-dlp para
-  descargar. Resuelve la ruta del binario de FFmpeg también en la app empaquetada
-  (`app.asar.unpacked`).
-- **Preload.** Expone una API mínima y segura (`window.api`) mediante
-  `contextBridge` — la única vía por la que la interfaz habla con el sistema.
-- **Renderer (React).** La interfaz, ejecutada con `contextIsolation` y **sin**
-  `nodeIntegration`. No tiene acceso directo a Node ni al sistema de archivos.
-
----
-
-## 🔒 Código
-
-El código fuente de esta aplicación es **privado**. Este repositorio contiene la
-ficha del proyecto y las descargas. Para una demo técnica o acceso al código,
-contacta con el autor.
+- **Main (Node).** App lifecycle and system operations: runs FFmpeg to convert
+  (with progress parsed from its output) and yt-dlp to download. Resolves the
+  FFmpeg binary path even in the packaged app (`app.asar.unpacked`).
+- **Preload.** Exposes a minimal, secure API (`window.api`) via `contextBridge`
+  — the only channel between the UI and the system.
+- **Renderer (React).** The UI, running with `contextIsolation` and **no**
+  `nodeIntegration`. No direct access to Node or the file system.
 
 ---
 
-## ⚖️ Licencia
+## 🔒 Source code
 
-Software propietario — **todos los derechos reservados** ([LICENSE](LICENSE)).
-Los binarios de *Releases* pueden usarse para fines **personales**.
-Descarga únicamente contenido sobre el que tengas derechos; respeta los términos
-de cada servicio.
+The source code of this app is **private**. This repository hosts the project
+page and the downloads. For a technical demo or code access, contact the author.
+
+---
+
+## ⚖️ License
+
+Proprietary software — **all rights reserved** ([LICENSE](LICENSE)).
+Binaries under *Releases* may be used for **personal** purposes.
+Only download content you have the rights to, and respect each service's terms.
