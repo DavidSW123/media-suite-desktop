@@ -17,6 +17,12 @@
 
 </div>
 
+<div align="center">
+
+![Media Suite — demo](docs/demo.gif)
+
+</div>
+
 A desktop application that bundles two tools in one clean, bilingual interface:
 
 - 🎬 **Capture** — download video or audio from YouTube and [hundreds of other sites](https://github.com/yt-dlp/yt-dlp/blob/master/supportedsites.md).

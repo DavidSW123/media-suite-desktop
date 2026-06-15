@@ -17,6 +17,12 @@
 
 </div>
 
+<div align="center">
+
+![Media Suite — demo](docs/demo.gif)
+
+</div>
+
 Aplicación de escritorio que reúne dos herramientas en una interfaz limpia y bilingüe:
 
 - 🎬 **Captura** — descarga vídeo o audio de YouTube y [cientos de webs más](https://github.com/yt-dlp/yt-dlp/blob/master/supportedsites.md).
